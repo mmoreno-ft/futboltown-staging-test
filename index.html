@@ -38,7 +38,7 @@
             border-radius: 12px;
             padding: 1.5rem;
             text-align: left;
-            margin-bottom: 2rem;
+            margin-bottom: 1.5rem;
         }
         .instructions h2 {
             font-size: 1rem;
@@ -50,6 +50,25 @@
             color: #b0b8c8;
             line-height: 1.6;
             margin-bottom: 0.5rem;
+        }
+        .btn-new-chat {
+            display: inline-block;
+            background: #f5c518;
+            color: #0a1628;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            margin-bottom: 1.5rem;
+            transition: background 0.2s;
+        }
+        .btn-new-chat:hover {
+            background: #e0b015;
+        }
+        .btn-new-chat:active {
+            transform: scale(0.98);
         }
         .badge {
             display: inline-block;
@@ -82,30 +101,65 @@
             <h2>Como probar</h2>
             <p>Haz click en el icono de chat abajo a la derecha para hablar con Sofia.</p>
             <p>Prueba preguntar por cumpleanos, birrias, precios, o cualquier consulta sobre Futbol Town.</p>
-            <p>Sofia esta en modo staging — los cambios que hagas aqui no afectan produccion.</p>
+            <p>Para iniciar una conversacion nueva como contacto nuevo, usa el boton amarillo.</p>
         </div>
 
+        <button class="btn-new-chat" onclick="resetChat()">Nueva conversacion</button>
+
+        <br>
         <div class="badge">STAGING - NO PRODUCCION</div>
 
         <div class="arrow">&#8595;</div>
     </div>
 
-    <!-- Chatwoot Widget -->
     <script>
-        (function(d,t) {
-            var BASE_URL="https://chatwoot-production-6de0.up.railway.app";
-            var g=d.createElement(t),s=d.getElementsByTagName(t)[0];
-            g.src=BASE_URL+"/packs/js/sdk.js";
+        var BASE_URL = "https://chatwoot-production-6de0.up.railway.app";
+
+        function resetChat() {
+            // Clear all Chatwoot cookies and storage
+            localStorage.clear();
+            sessionStorage.clear();
+
+            // Delete cookies for this domain
+            document.cookie.split(";").forEach(function(c) {
+                document.cookie = c.replace(/^ +/, "").replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/");
+            });
+
+            // Delete cookies for Chatwoot domain
+            var cookies = ["cw_conversation", "cw_user", "cw_d_session"];
+            cookies.forEach(function(name) {
+                document.cookie = name + "=;expires=" + new Date().toUTCString() + ";path=/";
+            });
+
+            // Remove Chatwoot widget from DOM
+            var widget = document.querySelector('.woot-widget-holder');
+            if (widget) widget.remove();
+            var bubble = document.querySelector('.woot--bubble-holder');
+            if (bubble) bubble.remove();
+
+            // Clear Chatwoot SDK state
+            if (window.$chatwoot) {
+                window.$chatwoot.reset();
+            }
+
+            // Reload page to get fresh widget
+            window.location.reload(true);
+        }
+
+        // Load Chatwoot widget
+        (function(d, t) {
+            var g = d.createElement(t), s = d.getElementsByTagName(t)[0];
+            g.src = BASE_URL + "/packs/js/sdk.js";
             g.defer = true;
             g.async = true;
-            s.parentNode.insertBefore(g,s);
-            g.onload=function(){
+            s.parentNode.insertBefore(g, s);
+            g.onload = function() {
                 window.chatwootSDK.run({
                     websiteToken: 'XzF7SPevGmffqGkrA6zzb2BB',
                     baseUrl: BASE_URL
                 })
             }
-        })(document,"script");
+        })(document, "script");
     </script>
 </body>
 </html>
