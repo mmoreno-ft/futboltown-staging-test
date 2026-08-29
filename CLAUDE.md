@@ -32,7 +32,7 @@ Limpia cookies, localStorage, sessionStorage y el estado del widget de Chatwoot,
 
 | Parámetro | Valor |
 |-----------|-------|
-| Chatwoot Base URL | https://chatwoot-production-6de0.up.railway.app |
+| Chatwoot Base URL | https://chat.futboltown.com.pa | <!-- el dominio largo de Railway se borró el 29-ago-2026: da 404 -->
 | Website Token | XzF7SPevGmffqGkrA6zzb2BB |
 | Inbox ID (staging) | 1 |
 | Webhook URL | https://sofia-webhook-staging-staging.up.railway.app/webhook/chatwoot |
